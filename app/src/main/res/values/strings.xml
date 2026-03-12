@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Доставка</string>
+    <string name="title_delivery">Доставка</string>
+    <string name="title_cart">Корзина</string>
+    <string name="title_profile">Профиль</string>
+    <string name="search_hint">Поиск</string>
+    <string name="done">Готово</string>
+    <string name="add">Добавить</string>
+    <string name="order">заказать</string>
+    <string name="total">Итого</string>
+</resources>
