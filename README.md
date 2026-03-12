@@ -27,5 +27,5 @@
 
 ## Сборка APK
 
-Инструкция по сборке из командной строки: `BUILD_APK.md`.
+Инструкция по сборке из командной строки: [`BUILD_APK.md`](https://github.com/fedor13F/mobile_course/blob/master/BUILD_APK.md).
 
