@@ -1,31 +1,54 @@
-# Практическая работа 2 — UI (Java)
+# Практическая работа 3 — локальная БД / CRUD (Delivery app)
 
-Реализован пользовательский интерфейс по макетам (ПР1) со статическими данными.
+Проект: Android-приложение доставки продуктов + backend API.
 
-## Экраны
+В рамках ПР3 добавлена “серверная часть” на **FastAPI** с **PostgreSQL** и реализованы **CRUD-операции** в домене приложения (товары/заказы).
 
-- Каталог (сетка товаров, кнопка добавления, переходы)
-- Карточка товара
-- Корзина (список + итог)
-- Выбор адреса (заглушка карты)
-- Профиль
+## Структура репозитория
 
-## Примеры Экранов
-<img width="30%" height="882" alt="Снимок экрана 2026-03-12 в 18 09 58" src="https://github.com/user-attachments/assets/bf599454-62ff-45a5-abdf-f10863943296" />
-<img width="30%" height="879" alt="Снимок экрана 2026-03-12 в 18 10 10" src="https://github.com/user-attachments/assets/62ad7b0f-6df6-4ca9-b921-2e8c3048120c" />
-<img width="30%" height="877" alt="Снимок экрана 2026-03-12 в 18 10 17" src="https://github.com/user-attachments/assets/05f015e3-7dd1-4d99-ba06-4afbbc92ec13" />
-<img width="30%" height="877" alt="Снимок экрана 2026-03-12 в 18 10 24" src="https://github.com/user-attachments/assets/d9d1f7a9-fae5-4e39-bde5-92246268d553" />
-<img width="30%" height="873" alt="Снимок экрана 2026-03-12 в 18 10 40" src="https://github.com/user-attachments/assets/e117e16d-18eb-45c3-a994-b01bb8eb61d1" />
+- `app/` — Android приложение (Java, UI как в ПР2)
+- `backend/` — FastAPI + PostgreSQL (CRUD API)
 
+## Backend (FastAPI + PostgreSQL)
 
-## Где смотреть код
+### Что реализовано
+
+- **Products CRUD**: создать/получить/обновить/удалить товар
+- **Orders CRUD**: создать/получить/обновить/удалить заказ (заказ содержит позиции `items`)
+
+Эндпоинты доступны в Swagger UI после запуска:
+- `http://localhost:8000/docs`
+
+### Запуск backend в Docker
+
+```bash
+cd /Users/fedor/AndroidStudioProjects/mobile_course/backend
+docker compose up -d --build
+```
+
+Остановка:
+
+```bash
+docker compose down
+```
+
+Если Postgres был запущен раньше и FastAPI падает с `InvalidPasswordError`, сбрось volume и подними заново:
+
+```bash
+docker compose down -v
+docker compose up -d --build
+```
+
+Подробности и примеры запросов: `backend/README.md`.
+
+## Android: где смотреть код
 
 - `app/src/main/java/com/example/lab2/` — `Activity`
-- `app/src/main/java/com/example/lab2/data/DataStore.java` — статические данные
+- `app/src/main/java/com/example/lab2/data/DataStore.java` — текущие статические данные (как в ПР2)
 - `app/src/main/java/com/example/lab2/ui/` — адаптеры RecyclerView
 - `app/src/main/res/layout/` — XML‑макеты
 
-## Сборка APK
+## Сборка APK из командной строки
 
-Инструкция по сборке из командной строки: [`BUILD_APK.md`](https://github.com/fedor13F/mobile_course/blob/master/BUILD_APK.md).
+Инструкция: `BUILD_APK.md`.
 
