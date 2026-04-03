@@ -47,3 +47,6 @@ adb install -r app/build/outputs/apk/debug/app-debug.apk
 
 
 
+## 4. Инструкция по запускую backend-а здесь
+
+

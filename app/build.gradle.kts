@@ -18,6 +18,9 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // Эмулятор Android Studio → Docker/хост: 10.0.2.2. На физическом устройстве замените на IP вашего ПК в LAN.
+        buildConfigField("String", "API_BASE_URL", "\"http://10.0.2.2:8000\"")
     }
 
     buildTypes {
@@ -36,6 +39,7 @@ android {
 
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 }
 
@@ -44,6 +48,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.recyclerview)
     implementation(libs.constraintlayout)
+    implementation(libs.okhttp)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

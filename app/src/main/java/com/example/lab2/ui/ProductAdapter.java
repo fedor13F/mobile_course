@@ -8,7 +8,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lab2.R;
-import com.example.lab2.data.DataStore;
 import com.example.lab2.databinding.ItemProductGridBinding;
 import com.example.lab2.model.Product;
 
@@ -22,12 +21,18 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.VH> {
         void onAdd(Product product, int position);
     }
 
+    public interface InCartChecker {
+        boolean isInCart(String productId);
+    }
+
     private final List<Product> items;
     private final Listener listener;
+    private final InCartChecker inCartChecker;
 
-    public ProductAdapter(List<Product> items, Listener listener) {
+    public ProductAdapter(List<Product> items, Listener listener, InCartChecker inCartChecker) {
         this.items = items;
         this.listener = listener;
+        this.inCartChecker = inCartChecker;
     }
 
     @NonNull
@@ -47,7 +52,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.VH> {
         holder.binding.ivProduct.setImageResource(product.getImageResId());
         holder.binding.tvPrice.setText(product.getPriceRub() + "₽");
 
-        boolean inCart = DataStore.isInCart(product.getId());
+        boolean inCart = inCartChecker.isInCart(product.getId());
         holder.binding.btnAdd.setImageResource(inCart ? R.drawable.ic_check : R.drawable.ic_plus);
         holder.binding.btnAdd.setEnabled(!inCart);
 

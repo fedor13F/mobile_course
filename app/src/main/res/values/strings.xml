@@ -8,4 +8,6 @@
     <string name="add">Добавить</string>
     <string name="order">заказать</string>
     <string name="total">Итого</string>
+    <string name="default_customer_name">Гость</string>
+    <string name="default_delivery_address">Адрес не указан</string>
 </resources>

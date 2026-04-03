@@ -1,5 +1,10 @@
 package com.example.lab2.model;
 
+import com.example.lab2.R;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class Product {
     private final String id;
     private final String name;
@@ -33,6 +38,16 @@ public class Product {
 
     public int getImageResId() {
         return imageResId;
+    }
+
+    public static Product fromJson(JSONObject o) throws JSONException {
+        return new Product(
+                o.getString("id"),
+                o.getString("name"),
+                o.getInt("price_rub"),
+                o.optString("description", ""),
+                R.drawable.ic_product
+        );
     }
 }
 

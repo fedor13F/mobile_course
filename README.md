@@ -1,19 +1,19 @@
-# Практическая работа 3 — локальная БД / CRUD (Delivery app)
+# Практическая работа 3
 
 Проект: Android-приложение доставки продуктов + backend API.
 
-В рамках ПР3 добавлена “серверная часть” на **FastAPI** с **PostgreSQL** и реализованы **CRUD-операции** в домене приложения (товары/заказы).
 
 ## Структура репозитория
 
-- `app/` — Android приложение (Java, UI как в ПР2)
+- `app/` — Android приложение
 - `backend/` — FastAPI + PostgreSQL (CRUD API)
 
 ## Backend (FastAPI + PostgreSQL)
 
 ### Что реализовано
 
-- **Products CRUD**: создать/получить/обновить/удалить товар
+- **Products CRUD**
+- **Cart**: корзина в PostgreSQL (`GET/POST /api/cart`, очистка перед новым заказом)
 - **Orders CRUD**: создать/получить/обновить/удалить заказ (заказ содержит позиции `items`)
 
 Эндпоинты доступны в Swagger UI после запуска:
@@ -32,19 +32,19 @@ docker compose up -d --build
 docker compose down
 ```
 
-Если Postgres был запущен раньше и FastAPI падает с `InvalidPasswordError`, сбрось volume и подними заново:
+Если Postgres был запущен раньше и FastAPI падает с `InvalidPasswordError`, нужно сбросить volume и поднять заново:
 
 ```bash
 docker compose down -v
 docker compose up -d --build
 ```
 
-Подробности и примеры запросов: `backend/README.md`.
 
 ## Android: где смотреть код
 
 - `app/src/main/java/com/example/lab2/` — `Activity`
-- `app/src/main/java/com/example/lab2/data/DataStore.java` — текущие статические данные (как в ПР2)
+- `app/src/main/java/com/example/lab2/data/DeliveryRepository.java` — HTTP‑клиент к API (товары, корзина, заказ)
+- `app/build.gradle.kts` — `buildConfigField API_BASE_URL` (по умолчанию `http://10.0.2.2:8000` для эмулятора; на телефоне укажи IP ПК в локальной сети)
 - `app/src/main/java/com/example/lab2/ui/` — адаптеры RecyclerView
 - `app/src/main/res/layout/` — XML‑макеты
 
