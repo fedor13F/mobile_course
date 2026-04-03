@@ -44,11 +44,11 @@ docker compose up -d --build
 
 - `app/src/main/java/com/example/lab2/` — `Activity`
 - `app/src/main/java/com/example/lab2/data/DeliveryRepository.java` — HTTP‑клиент к API (товары, корзина, заказ)
-- `app/build.gradle.kts` — `buildConfigField API_BASE_URL` (по умолчанию `http://10.0.2.2:8000` для эмулятора; на телефоне укажи IP ПК в локальной сети)
+- `app/build.gradle.kts` — `buildConfigField API_BASE_URL` (по умолчанию `http://10.0.2.2:8000` для эмулятора; на телефоне указать IP ПК в локальной сети)
 - `app/src/main/java/com/example/lab2/ui/` — адаптеры RecyclerView
 - `app/src/main/res/layout/` — XML‑макеты
 
 ## Сборка APK из командной строки
 
-Инструкция: `BUILD_APK.md`.
+Инструкция: [`BUILD_APK.md`](https://github.com/fedor13F/mobile_course/blob/master/BUILD_APK.md).
 
