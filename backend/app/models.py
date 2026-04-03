@@ -29,6 +29,26 @@ class Product(Base):
         back_populates="product",
         cascade="all, delete-orphan",
     )
+    cart_lines = relationship(
+        "CartLine",
+        back_populates="product",
+        cascade="all, delete-orphan",
+    )
+
+
+class CartLine(Base):
+    """Одна корзина на всё приложение (для учебного сценария)."""
+
+    __tablename__ = "cart_lines"
+
+    product_id = Column(String, ForeignKey("products.id", ondelete="CASCADE"), primary_key=True)
+    quantity = Column(Integer, nullable=False)
+
+    __table_args__ = (
+        CheckConstraint("quantity > 0", name="cart_lines_quantity_positive"),
+    )
+
+    product = relationship("Product", back_populates="cart_lines")
 
 
 class Order(Base):

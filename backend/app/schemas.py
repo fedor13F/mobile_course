@@ -60,3 +60,16 @@ class OrderRead(BaseModel):
     items: list[OrderItemRead]
     total_rub: int
 
+
+class CartLineRead(BaseModel):
+    product_id: str
+    name: str
+    quantity: int
+    unit_price_rub: int
+    line_total_rub: int
+
+
+class CartItemAdd(BaseModel):
+    product_id: str = Field(min_length=1, max_length=128)
+    quantity: int = Field(default=1, ge=1, le=10_000)
+

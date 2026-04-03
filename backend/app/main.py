@@ -6,10 +6,13 @@ from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from .crud import (
+    add_to_cart,
+    clear_cart,
     create_order,
     create_product,
     delete_order,
     delete_product,
+    get_cart,
     get_order,
     get_product,
     list_orders,
@@ -20,6 +23,8 @@ from .crud import (
 from .db import AsyncSessionLocal, engine, get_db
 from .models import Base, Product
 from .schemas import (
+    CartItemAdd,
+    CartLineRead,
     OrderCreate,
     OrderRead,
     OrderUpdate,
@@ -104,6 +109,24 @@ async def api_delete_product(product_id: str, db: AsyncSession = Depends(get_db)
     except ValueError:
         raise HTTPException(status_code=409, detail="product_in_use")
     return None
+
+
+@app.get("/api/cart", response_model=list[CartLineRead])
+async def api_get_cart(db: AsyncSession = Depends(get_db)):
+    return await get_cart(db)
+
+
+@app.post("/api/cart/items", response_model=list[CartLineRead])
+async def api_add_to_cart(payload: CartItemAdd, db: AsyncSession = Depends(get_db)):
+    try:
+        return await add_to_cart(db, payload)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@app.delete("/api/cart", status_code=204)
+async def api_clear_cart(db: AsyncSession = Depends(get_db)):
+    await clear_cart(db)
 
 
 @app.get("/api/orders", response_model=list[OrderRead])

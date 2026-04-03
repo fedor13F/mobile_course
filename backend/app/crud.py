@@ -7,8 +7,10 @@ from sqlalchemy import select, delete
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from .models import Order, OrderItem, Product
+from .models import CartLine, Order, OrderItem, Product
 from .schemas import (
+    CartItemAdd,
+    CartLineRead,
     OrderCreate,
     OrderRead,
     OrderUpdate,
@@ -80,6 +82,48 @@ async def delete_product(db: AsyncSession, product_id: str) -> None:
     except IntegrityError as e:
         await db.rollback()
         raise ValueError("product_in_use") from e
+
+
+async def get_cart(db: AsyncSession) -> list[CartLineRead]:
+    stmt = (
+        select(CartLine.product_id, CartLine.quantity, Product.name, Product.price_rub)
+        .join(Product, CartLine.product_id == Product.id)
+        .order_by(Product.name)
+    )
+    rows = (await db.execute(stmt)).all()
+    out: list[CartLineRead] = []
+    for product_id, quantity, name, unit_price in rows:
+        line_total = unit_price * quantity
+        out.append(
+            CartLineRead(
+                product_id=product_id,
+                name=name,
+                quantity=quantity,
+                unit_price_rub=unit_price,
+                line_total_rub=line_total,
+            )
+        )
+    return out
+
+
+async def add_to_cart(db: AsyncSession, data: CartItemAdd) -> list[CartLineRead]:
+    product = await get_product(db, data.product_id)
+    if product is None:
+        raise ValueError("product_not_found")
+
+    line = (await db.execute(select(CartLine).where(CartLine.product_id == data.product_id))).scalar_one_or_none()
+    if line is None:
+        db.add(CartLine(product_id=data.product_id, quantity=data.quantity))
+    else:
+        line.quantity += data.quantity
+
+    await db.commit()
+    return await get_cart(db)
+
+
+async def clear_cart(db: AsyncSession) -> None:
+    await db.execute(delete(CartLine))
+    await db.commit()
 
 
 async def list_orders(db: AsyncSession, offset: int = 0, limit: int = 100) -> list[OrderRead]:
