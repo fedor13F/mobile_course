@@ -7,8 +7,10 @@ from sqlalchemy import select, delete
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from .models import CartLine, Order, OrderItem, Product
+from .models import CartLine, Order, OrderItem, Product, SelectedAddress
 from .schemas import (
+    AddressRead,
+    AddressSave,
     CartItemAdd,
     CartLineRead,
     OrderCreate,
@@ -124,6 +126,32 @@ async def add_to_cart(db: AsyncSession, data: CartItemAdd) -> list[CartLineRead]
 async def clear_cart(db: AsyncSession) -> None:
     await db.execute(delete(CartLine))
     await db.commit()
+
+
+async def get_selected_address(db: AsyncSession) -> Optional[AddressRead]:
+    row = (await db.execute(select(SelectedAddress).where(SelectedAddress.id == 1))).scalar_one_or_none()
+    if row is None:
+        return None
+    return AddressRead(label=row.label, latitude=row.latitude, longitude=row.longitude)
+
+
+async def save_selected_address(db: AsyncSession, data: AddressSave) -> AddressRead:
+    row = (await db.execute(select(SelectedAddress).where(SelectedAddress.id == 1))).scalar_one_or_none()
+    if row is None:
+        row = SelectedAddress(
+            id=1,
+            label=data.label,
+            latitude=data.latitude,
+            longitude=data.longitude,
+        )
+        db.add(row)
+    else:
+        row.label = data.label
+        row.latitude = data.latitude
+        row.longitude = data.longitude
+
+    await db.commit()
+    return AddressRead(label=row.label, latitude=row.latitude, longitude=row.longitude)
 
 
 async def list_orders(db: AsyncSession, offset: int = 0, limit: int = 100) -> list[OrderRead]:

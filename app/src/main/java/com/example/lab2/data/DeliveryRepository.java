@@ -36,6 +36,18 @@ import okhttp3.Response;
  */
 public final class DeliveryRepository {
 
+    public static final class AddressInfo {
+        public final String label;
+        public final double latitude;
+        public final double longitude;
+
+        public AddressInfo(String label, double latitude, double longitude) {
+            this.label = label;
+            this.latitude = latitude;
+            this.longitude = longitude;
+        }
+    }
+
     public interface ResultCallback<T> {
         void onSuccess(T value);
 
@@ -210,6 +222,52 @@ public final class DeliveryRepository {
                 main.post(() -> callback.onSuccess(orderId));
             } catch (Exception e) {
                 main.post(() -> callback.onError(e.getMessage() != null ? e.getMessage() : "error"));
+            }
+        });
+    }
+
+    public void loadSelectedAddress(ResultCallback<AddressInfo> callback) {
+        io.execute(() -> {
+            try {
+                HttpUrl url = apiRoot().newBuilder()
+                        .addPathSegment("api")
+                        .addPathSegment("address")
+                        .build();
+                String body = getBody(new Request.Builder().url(url).get().build());
+                if (body == null || body.isBlank() || "null".equals(body.trim())) {
+                    main.post(() -> callback.onSuccess(null));
+                    return;
+                }
+                JSONObject o = new JSONObject(body);
+                AddressInfo info = new AddressInfo(
+                        o.getString("label"),
+                        o.getDouble("latitude"),
+                        o.getDouble("longitude")
+                );
+                main.post(() -> callback.onSuccess(info));
+            } catch (Exception e) {
+                main.post(() -> callback.onError(e.getMessage() != null ? e.getMessage() : "error"));
+            }
+        });
+    }
+
+    public void saveSelectedAddress(AddressInfo info, VoidCallback callback) {
+        io.execute(() -> {
+            try {
+                JSONObject json = new JSONObject();
+                json.put("label", info.label);
+                json.put("latitude", info.latitude);
+                json.put("longitude", info.longitude);
+                HttpUrl url = apiRoot().newBuilder()
+                        .addPathSegment("api")
+                        .addPathSegment("address")
+                        .build();
+                RequestBody rb = RequestBody.create(json.toString(), JSON);
+                executeWithoutBody(new Request.Builder().url(url).put(rb).build());
+                main.post(callback::onSuccess);
+            } catch (Exception e) {
+                String msg = e.getMessage() != null ? e.getMessage() : "error";
+                main.post(() -> callback.onError(msg));
             }
         });
     }

@@ -4,6 +4,7 @@ from sqlalchemy import (
     CheckConstraint,
     Column,
     DateTime,
+    Float,
     ForeignKey,
     Integer,
     String,
@@ -49,6 +50,16 @@ class CartLine(Base):
     )
 
     product = relationship("Product", back_populates="cart_lines")
+
+
+class SelectedAddress(Base):
+    __tablename__ = "selected_address"
+
+    # Один сохраненный адрес для учебного сценария.
+    id = Column(Integer, primary_key=True, default=1)
+    label = Column(String, nullable=False)
+    latitude = Column(Float, nullable=False)
+    longitude = Column(Float, nullable=False)
 
 
 class Order(Base):
