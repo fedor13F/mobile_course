@@ -34,19 +34,11 @@ cd /Users/fedor/AndroidStudioProjects/mobile_course
 
 - `app/build/outputs/apk/debug/app-debug.apk`
 
-### Установка Debug‑APK на устройство/эмулятор (опционально)
 
-При наличии `adb`:
-
-```bash
-adb install -r app/build/outputs/apk/debug/app-debug.apk
-```
-
-
-## 4. Запускать приложения удобнее всего через Android Studio
+### 4. Запускать приложения удобнее всего через Android Studio
 
 
 
-## 4. Инструкция по запускую backend-а здесь
+### 4. Инструкция по запускую [`backend-а здесь`](https://github.com/fedor13F/mobile_course/blob/master/backend/README.md) 
 
 
