@@ -13,16 +13,20 @@ from .crud import (
     delete_order,
     delete_product,
     get_cart,
+    get_selected_address,
     get_order,
     get_product,
     list_orders,
     list_products,
+    save_selected_address,
     update_order,
     update_product,
 )
 from .db import AsyncSessionLocal, engine, get_db
 from .models import Base, Product
 from .schemas import (
+    AddressRead,
+    AddressSave,
     CartItemAdd,
     CartLineRead,
     OrderCreate,
@@ -127,6 +131,16 @@ async def api_add_to_cart(payload: CartItemAdd, db: AsyncSession = Depends(get_d
 @app.delete("/api/cart", status_code=204)
 async def api_clear_cart(db: AsyncSession = Depends(get_db)):
     await clear_cart(db)
+
+
+@app.get("/api/address", response_model=AddressRead | None)
+async def api_get_selected_address(db: AsyncSession = Depends(get_db)):
+    return await get_selected_address(db)
+
+
+@app.put("/api/address", response_model=AddressRead)
+async def api_save_selected_address(payload: AddressSave, db: AsyncSession = Depends(get_db)):
+    return await save_selected_address(db, payload)
 
 
 @app.get("/api/orders", response_model=list[OrderRead])

@@ -1,25 +1,32 @@
-# Практическая работа 3
+# Практическая работа 4
 
-Проект: Android-приложение доставки продуктов + backend API.
+Android-приложение доставки продуктов с backend на FastAPI/PostgreSQL.
+
+## Что реализовано в ПР4
+
+- **Карта (OpenStreetMap / osmdroid)** на экране выбора адреса.
+- **Метки с описанием** на карте (пункты выдачи и склад).
+- **Выбор адреса тапом по карте** и сохранение выбранной точки в БД через API.
+- **Внешнее API**: тайлы OpenStreetMap загружаются из сети и отображаются в приложении.
+- Выбранный адрес показывается в корзине и используется при оформлении заказа.
+
+## Структура проекта
+
+- `app/` — Android-приложение (Java, XML, osmdroid, OkHttp).
+- `backend/` — FastAPI + PostgreSQL (товары, корзина, заказы, адрес доставки).
+
+## Backend API
+
+После запуска backend Swagger доступен по адресу: `http://localhost:8000/docs`.
+
+Основные эндпоинты:
+- `GET /api/products` — список товаров.
+- `GET/POST /api/cart`, `DELETE /api/cart` — корзина.
+- `POST /api/orders` — оформление заказа.
+- `GET/PUT /api/address` — получить/сохранить выбранный адрес доставки.
 
 
-## Структура репозитория
-
-- `app/` — Android приложение
-- `backend/` — FastAPI + PostgreSQL (CRUD API)
-
-## Backend (FastAPI + PostgreSQL)
-
-### Что реализовано
-
-- **Products CRUD**
-- **Cart**: корзина в PostgreSQL (`GET/POST /api/cart`, очистка перед новым заказом)
-- **Orders CRUD**: создать/получить/обновить/удалить заказ (заказ содержит позиции `items`)
-
-Эндпоинты доступны в Swagger UI после запуска:
-- `http://localhost:8000/docs`
-
-### Запуск backend в Docker
+## Запуск backend в Docker
 
 ```bash
 cd /Users/fedor/AndroidStudioProjects/mobile_course/backend
@@ -32,23 +39,14 @@ docker compose up -d --build
 docker compose down
 ```
 
-Если Postgres был запущен раньше и FastAPI падает с `InvalidPasswordError`, нужно сбросить volume и поднять заново:
+Если есть ошибка `InvalidPasswordError`:
 
 ```bash
 docker compose down -v
 docker compose up -d --build
 ```
 
-
-## Android: где смотреть код
-
-- `app/src/main/java/com/example/lab2/` — `Activity`
-- `app/src/main/java/com/example/lab2/data/DeliveryRepository.java` — HTTP‑клиент к API (товары, корзина, заказ)
-- `app/build.gradle.kts` — `buildConfigField API_BASE_URL` (по умолчанию `http://10.0.2.2:8000` для эмулятора; на телефоне укажи IP ПК в локальной сети)
-- `app/src/main/java/com/example/lab2/ui/` — адаптеры RecyclerView
-- `app/src/main/res/layout/` — XML‑макеты
-
 ## Сборка APK из командной строки
 
-Инструкция: `BUILD_APK.md`.
+См. `BUILD_APK.md`.
 

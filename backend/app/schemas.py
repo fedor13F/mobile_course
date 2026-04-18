@@ -73,3 +73,15 @@ class CartItemAdd(BaseModel):
     product_id: str = Field(min_length=1, max_length=128)
     quantity: int = Field(default=1, ge=1, le=10_000)
 
+
+class AddressSave(BaseModel):
+    label: str = Field(min_length=1, max_length=512)
+    latitude: float
+    longitude: float
+
+
+class AddressRead(BaseModel):
+    label: str
+    latitude: float
+    longitude: float
+
