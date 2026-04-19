@@ -29,7 +29,7 @@ Android-приложение доставки продуктов с backend на
 ## Запуск backend в Docker
 
 ```bash
-cd /Users/fedor/AndroidStudioProjects/mobile_course/backend
+cd backend
 docker compose up -d --build
 ```
 
