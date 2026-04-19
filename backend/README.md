@@ -10,7 +10,7 @@
 ### Вариант A: запуск в Docker (PostgreSQL + FastAPI)
 
 ```bash
-cd /Users/fedor/AndroidStudioProjects/mobile_course/backend
+cd backend
 docker compose up -d --build
 ```
 
@@ -24,7 +24,7 @@ API будет доступен здесь:
 Сбросить БД и поднять заново:
 
 ```bash
-cd /Users/fedor/AndroidStudioProjects/mobile_course/backend
+cd backend
 docker compose down -v
 docker compose up -d --build
 ```
@@ -32,7 +32,7 @@ docker compose up -d --build
 ### Вариант B: запуск локально (без Docker)
 
 ```bash
-cd /Users/fedor/AndroidStudioProjects/mobile_course/backend
+cd backend
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
